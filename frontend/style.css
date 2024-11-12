@@ -220,7 +220,48 @@ body {
     bottom: 16px;
     right: 16px;
 }
+
+
 /* SHOP */
+
+#page-header {
+    position: relative;
+    width: 100%;
+    height: 25vh;
+    background-size: cover;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden; /* To ensure pseudo-element doesn't overflow */
+}
+
+#page-header::before {
+    content: "";
+    background-image: url("media/c2.png");
+    opacity: 70%; /* Adjust the opacity level as needed */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -1; /* Send the background image behind the content */
+}
+#page-header .ph-txt h2{
+    color: rgb(255, 255, 255);
+    padding-top: 60px;
+    position: relative;
+    z-index: 1;
+}
+
+#page-header .ph-txt p{
+    color: white;
+    margin-top: -2px;
+    position: relative;
+    z-index: 1;
+}
+
+
 /* FOOTER */
 
 footer {
@@ -242,6 +283,7 @@ footer .col{
 footer p {
     font-size: 13px;
     margin: 0 0 8px 0;
+    color: rgb(107, 107, 107);
 }
 
 footer .logo{
@@ -250,7 +292,7 @@ footer .logo{
 
 footer h4{
     font-size:14px;
-    padding-bottom: 20px;
+    padding-bottom: 4px;
 }
 
 footer a {
@@ -260,9 +302,14 @@ footer a {
     margin-bottom: 10px;
 }
 
+footer a:hover {
+    color: #519725;
+    text-decoration: underline;
+}
+
 footer .follow i {
     font-size: 20px;
-    color:rgb(42, 94, 18);
+    color:rgb(52, 52, 52);
 }
 
 footer .cred {
@@ -270,8 +317,20 @@ footer .cred {
     text-align: center;
 }
 
+footer .pay {
+    background-size: 20px;
+}
 /*Cart Page*/
 /*Start Media Query*/
 @media (max-width) {
     
+}
+
+/*About*/
+#about {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
