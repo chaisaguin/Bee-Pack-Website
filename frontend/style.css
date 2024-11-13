@@ -318,7 +318,9 @@ footer .cred {
 }
 
 footer .pay {
-    background-size: 20px;
+    position: relative;
+    height: 20vh;
+    
 }
 /*Cart Page*/
 /*Start Media Query*/
