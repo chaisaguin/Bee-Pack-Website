@@ -225,42 +225,38 @@ body {
 /* SHOP */
 
 #page-header {
-    position: relative;
+    background-image: url("media/c2-60opacity.png");
     width: 100%;
     height: 25vh;
     background-size: cover;
+    display: flex;
     justify-content: center;
     text-align: center;
-    overflow: hidden; /* To ensure pseudo-element doesn't overflow */
+    flex-direction:column;
+    padding: 14px;
 }
 
-#page-header::before {
-    content: "";
-    background-image: url("media/c2.png");
-    opacity: 70%; /* Adjust the opacity level as needed */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    z-index: -1; /* Send the background image behind the content */
-}
-#page-header .ph-txt h2{
+#page-header h2,
+#page-header p {
     color: rgb(255, 255, 255);
-    padding-top: 60px;
-    position: relative;
-    z-index: 1;
 }
 
-#page-header .ph-txt p{
+#page-header p {
+    margin-top: -1px;
+}
+
+#pagination {
+    text-align: center;
+}
+
+
+#pagination a, 
+#pagination i{
+    background-color: #222;
     color: white;
-    margin-top: -2px;
-    position: relative;
-    z-index: 1;
+    padding: 10px 15px;
+    border-radius: 4px;
 }
-
 
 /* FOOTER */
 
@@ -324,9 +320,7 @@ footer .pay {
 }
 /*Cart Page*/
 /*Start Media Query*/
-@media (max-width) {
-    
-}
+
 
 /*About*/
 #about {
