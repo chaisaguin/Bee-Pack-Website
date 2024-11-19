@@ -34,10 +34,13 @@
             <img src="media/products/f7.png" width="100%" id="MainImg" alt="">
             <div class="small-img-group">
                     <div class="small-img-col">
-                        <img src="media/products/f8.png"  width="100%" id="small-img" alt="">
+                        <img src="media/products/f7.png"  width="100%" class="small-img" alt="">
                     </div>
                     <div class="small-img-col">
-                        <img src="media/products/f6.png"  width="100%" id="small-img" alt="">
+                        <img src="media/products/f8.png"  width="100%" class="small-img" alt="">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="media/products/f6.png"  width="100%" class="small-img" alt="">
                     </div>
             </div>
         </div>
@@ -66,10 +69,6 @@
                     <strong>Reuse<br></strong>
                     Reuse for an entire year with regular use and good care. At the end of its life, wraps can be composted or used as a natural fire starter.<br><br>
 
-
-
-
-
                 </p>
                 <!-- 
                     1. Connect Single page 
@@ -82,9 +81,82 @@
 
     </section>
 
+<div id="sproductfeatures">
+    <section id="product1" class="section-p1">
+        <h2>You may also like...</h2>
+        <div class="pro-container">
+                <div class="pro" alt="">
+                    <img src="media\products\f1.png">
+                    <div class="des">
+                        <span>Bee Pack Winter Collection</span>
+                        <h5>Roll-on Food Wrap</h5>
+                        <div class="star">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <h4>$20</h4>
+                    </div>
+                    <a href="#"><i class='bx bxs-cart-alt cart'></i></a>
+                </div>
 
 
+
+                <div class="pro" alt="">
+                    <img src="media\products\f5.png">
+                    <div class="des">
+                        <span>Bee Pack Winter Collection</span>
+                        <h5>Roll-on Food Wrap</h5>
+                        <div class="star">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <h4>$20</h4>
+                    </div>
+                    <a href="#"><i class='bx bxs-cart-alt cart'></i></a>
+                </div>
+
+                <div class="pro" alt="">
+                    <img src="media\products\f2.png">
+                    <div class="des">
+                        <span>Bee Pack Winter Collection</span>
+                        <h5>Roll-on Food Wrap</h5>
+                        <div class="star">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <h4>$20</h4>
+                    </div>
+                    <a href="#"><i class='bx bxs-cart-alt cart'></i></a>
+                </div>
+
+        </div>
+    </section>
+</div>
     
+
+<script>   
+    var MainImg = document.getElementById("MainImg");
+    var smallimg = document.getElementsByClassName("small-img");
+
+    smallimg[0].onclick = function() {
+        MainImg.src = smallimg[0].src;
+    }
+    smallimg[1].onclick = function() {
+        MainImg.src = smallimg[1].src;
+    }
+    smallimg[2].onclick = function() {
+        MainImg.src = smallimg[2].src;
+    }
+
+</script>
+
+
     <footer class="section-p1">
         <div class="col">
             <img class="logo" src="media/logo-small.png" alt="">
