@@ -118,8 +118,14 @@ hr.solid {
     position: absolute;
     bottom: -4px;
     left: 20px;
-
 }
+
+#mobile {
+    display: none;
+    align-items: center;
+}
+
+
 
 /* HOME PAGE */
 
@@ -162,8 +168,8 @@ hr.solid {
     color: white;
 }
 #hero button:hover {
-    background-color: rgb(210, 224, 214);
-    color:rgb(71, 133, 20);
+    background-color: rgb(71, 133, 20);
+    color:rgb(210, 224, 214);
     transition: 0.4s ease;
 }
 /* FEATURED PRODUCTS @ Homepage */
@@ -415,6 +421,29 @@ footer .pay {
     
 }
 /*Cart Page*/
+#cart-header {
+    background-image: url("media/c6.jpg");
+    /* background-color: #519725; */
+    width: 100%;
+    height: 25vh;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction:column;
+    padding: 12px;
+
+}
+
+#cart-header h2,
+#cart-header p {
+    margin: 5px;
+    color: rgb(36, 36, 36);
+}
+
+#cart-header p {
+    margin-top: -1px;
+}
 
 
 
@@ -429,6 +458,45 @@ footer .pay {
 }
 
 /*Start Media Query*/
+@media (max-width: 768px) {
+    #navbar {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        position: fixed;
+        top: 0;
+        right: -300px;
+        height: 100vh;
+        width: 300px;
+        background-color: white;
+        box-shadow: 0 40px 60px rgb(0,0,0,0.1);
+        padding: 80px 0 0 10px;
+        transition: 0.3s;
+    }
+
+    #navbar.active {
+        right: 0px;
+    }
+
+    #navbar li{
+        margin-bottom: 25px;
+    }
+
+    #mobile {
+        display: flex;
+        align-items: center;
+    }
+    
+    #mobile i{
+        font-size: 25px;
+        padding-left: 20px;
+        color: #222;
+    }
+    
+
+}
+
 @media (max-width: 477px) {
     .section-p1 {
         padding: 20px;
