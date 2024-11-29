@@ -421,6 +421,11 @@ footer .pay {
     
 }
 /*Cart Page*/
+#cart {
+    overflow-x: auto;
+}
+
+
 #cart-header {
     background-image: url("media/c6.jpg");
     /* background-color: #519725; */
@@ -500,6 +505,47 @@ footer .pay {
 
 #cart table tbody td {
     font-size: 13px;
+}
+
+#cart-add{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#subtotal {
+    width: 50%;
+    margin-bottom: 30px;
+    border: 1px solid rgb(209, 209, 209);
+    padding: 30px;
+}
+
+#subtotal table{
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#subtotal table td{
+    width: 50%;
+    border: 1px solid whitesmoke;
+    padding: 15px;
+    font-size: 14px;
+}
+
+#subtotal h3{
+    padding: 10px;
+}
+
+#subtotal button {
+    background-color: #519725;
+    color: #fff;
+    padding: 12px 20px;
+}
+
+#subtotal button:hover {
+    background-color: green;
+
 }
 
 /*About*/
