@@ -4,7 +4,7 @@ namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
 
-class Products extends Model
+class Product extends Model
 {
     protected $connection = 'mongodb';
     protected $collection = 'product';

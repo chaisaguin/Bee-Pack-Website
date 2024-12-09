@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MongoDB\Client;
 
-
 class ProductsController extends Controller
 {
     /**
@@ -31,27 +30,24 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = Product::create([
+            'Product_Name' => $request->input('Product_Name'),
+            'Product_Description' => $request->input('Product_Description'),
+            'Product_Price' => $request->input('Product_Price'),
+            'image_path' => $request->file('image')->store('products/images', 'public'),
+        ]);
+
+        return response()->json($product);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show()
-        {
-            // Initialize the MongoDB client with the URI from the .env file
-            $client = new Client(env('DB_URI'));
-
-            // Access the BeePackDB database and the products collection
-            $collection = $client->BeePackDB2->products;
-
-            // Fetch all documents from the products collection
-            $products = collect($collection->find()->toArray());
-
-            // Return the data to the view
-            return view('browse_products', ['products' => $products]);
-        }
-
+    public function showProducts()
+    {
+        $products = Products::all(); // Fetch all products
+        return view('frontend.shop', compact('products')); // Pass products to the view
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -75,5 +71,58 @@ class ProductsController extends Controller
     public function destroy(Products $products)
     {
         //
+    }
+
+    public function testMongoDB()
+    {
+        try {
+            $client = new \MongoDB\Client(env('DB_URI'));
+            $collection = $client->BeePackDB2->products;
+            $products = $collection->find()->toArray();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $products
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function addToCart(Request $request)
+    {
+        $productId = $request->input('product_id');
+        $product = Product::where('Product_ID', $productId)->first();
+    
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product not found!');
+        }
+    
+        $cart = session()->get('cart', []);
+    
+        if (isset($cart[$productId])) {
+            $cart[$productId]['quantity']++;
+        } else {
+            $cart[$productId] = [
+                "name" => $product->Product_Name,
+                "quantity" => 1,
+                "price" => $product->Product_Price,
+                "image" => $product->image_path
+            ];
+        }
+    
+        session()->put('cart', $cart);
+        session()->flash('success', "{$product->Product_Name} has been added to your cart!");
+    
+        return redirect()->route('cart.show');
+    }
+    
+    public function showCart()
+    {
+        $cart = session()->get('cart', []);
+        return view('frontend.cart', compact('cart'));
     }
 }
