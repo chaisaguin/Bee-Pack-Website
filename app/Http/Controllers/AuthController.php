@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\CustomerOrder;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -92,7 +93,8 @@ class AuthController extends Controller
     public function account()
     {
         $customer = Auth::user();
-        return view('customer.account', ['customer' => $customer]);
+        $orders = Order::where('customer_id', $customer->Customer_ID)->get();
+        return view('customer.account', ['customer' => $customer, 'orders' => $orders]);
     }
 
     public function getCustomer($customerId)

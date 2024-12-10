@@ -26,6 +26,25 @@
                 <button class="btn btn-dark" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="card p-4 mb-4" style="border-radius: 5px;">
+                <h3 class="text-center mb-4">Order Status & Feedback</h3>
+                @if($orders->isEmpty())
+                    <p>No orders found.</p>
+                @else
+                    <ul class="list-group">
+                        @foreach($orders as $order)
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Order #{{ $order->order_id }}
+                                <span class="badge badge-primary badge-pill">{{ ucfirst($order->status) }}</span>
+                                <button class="btn btn-sm btn-outline-secondary ml-3" @if($order->status !== 'Delivered') disabled @endif>Feedback</button>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        </div>
+    </div>
 
 <!-- Edit Profile Modal -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">

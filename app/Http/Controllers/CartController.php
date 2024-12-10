@@ -160,9 +160,8 @@ class CartController extends Controller
                          ->first();
 
         // Set up checkout data
-        $order_id = 'ORD' . strtoupper(uniqid());
         Session::put('checkout', [
-            'order_id' => $order_id,
+            'order_id' => $order_id = Session::get('checkout.order_id') ?? 'ORD' . strtoupper(uniqid()),
             'status' => 'pending',
             'subtotal' => $cart->subtotal(),
             'tax' => $cart->tax(),
@@ -221,11 +220,9 @@ class CartController extends Controller
                     'phone' => 'required',
                 ]);
 
-                $order_id = 'ORD' . strtoupper(uniqid());
-                
                 $address = new Address();
                 $address->user_id = $user_id;
-                $address->order_id = $order_id;
+                $address->order_id = $order_id =  Session::get('checkout.order_id');
                 $address->name = $request->name;
                 $address->address = $request->address;
                 $address->landmark = $request->landmark;
@@ -240,10 +237,11 @@ class CartController extends Controller
                 Log::info('New address created:', $address->toArray());
             }
 
-            
+            $Payment_ReferenceCode = 'REF' . strtoupper(uniqid()); // Payment reference code
+
             $order = new Order();
             $order->customer_id = Auth::user()->Customer_ID;  // Use Customer_ID instead of user_id
-            $order->order_id = $order_id;
+            $order->order_id = $order_id = Session::get('checkout.order_id');
             $order->status = 'pending';
             $order->subtotal = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->subtotal());
             $order->tax = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->tax());
@@ -257,6 +255,7 @@ class CartController extends Controller
             $order->country = $address->country;
             $order->landmark = $address->landmark;
             $order->zip = $address->zip;
+            $order->Payment_ReferenceCode = $Payment_ReferenceCode;
             $order->save();
 
             Log::info('Order created:', [
@@ -302,7 +301,7 @@ class CartController extends Controller
 
             // Create payment record
             $payment = new Payment();
-            $payment->Payment_ReferenceCode = 'PAY-' . strtoupper(uniqid());
+            $payment->Payment_ReferenceCode = $Payment_ReferenceCode;
             $payment->Payment_Method = $payment_method;
             $payment->save();
 
