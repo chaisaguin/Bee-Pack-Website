@@ -10,6 +10,7 @@ use App\Models\Address;
 use App\Models\OrderItem;
 use App\Models\Order;
 use App\Models\Transaction;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 
@@ -274,15 +275,20 @@ class CartController extends Controller
             $transaction = new Transaction();
             $transaction->user_id = $user_id;
             $transaction->order_id = $order->id;
+            
+            $payment_method = '';
             switch($request->mode) {
                 case 'cod':
                     $transaction->mode = 'cod';
+                    $payment_method = 'Cash on Delivery';
                     break;
                 case 'card':
                     $transaction->mode = 'card';
+                    $payment_method = 'Credit/Debit Card';
                     break;
                 case 'e_wallet':
                     $transaction->mode = 'e_wallet';
+                    $payment_method = 'E-Wallet';
                     break;
             }
             
@@ -290,6 +296,16 @@ class CartController extends Controller
             $transaction->amount = $order->total;
             $transaction->save();
 
+            // Create payment record
+            $payment = new Payment();
+            $payment->Payment_ReferenceCode = 'PAY-' . strtoupper(uniqid());
+            $payment->Payment_Method = $payment_method;
+            $payment->save();
+
+            Log::info('Payment created:', [
+                'reference' => $payment->Payment_ReferenceCode,
+                'method' => $payment->Payment_Method
+            ]);
             Log::info('Transaction created:', $transaction->toArray());
         
             Cart::instance($cartInstance)->destroy();
