@@ -3,6 +3,87 @@
 @section('title', 'Product Details')
 
 @section('content')
+<style>
+    .alert {
+        margin-top: 40px;
+        border: none;
+        border-radius: 16px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+        width: 500px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-left: 4px solid #28a745;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+    }
+
+    .alert i {
+        font-size: 1.1em;
+        vertical-align: middle;
+    }
+
+    .alert-close {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        padding: 5px;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+        border-radius: 10px;
+    }
+
+    .alert-close:hover {
+        opacity: 1;
+    }
+
+    .alert-close .bx {
+        font-size: 1.5em;
+        color: inherit;
+    }
+
+    .fade {
+        transition: opacity 0.15s linear;
+    }
+</style>
+
+<div class="container mt-3">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    {{ session('success') }}
+                    <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class='bx bx-x'></i>
+                    </button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    {{ session('error') }}
+                    <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class='bx bx-x'></i>
+                    </button>
+                </div>
+            @endif
+        </div>
+
+
+
 <section id="prodetails" class="section-p1">
     
     <div class="single-pro-image">
@@ -22,7 +103,6 @@
 
     <div class="single-pro-details">
         <h5>SHOP / PRODUCTS</h5>
-
 
         <h4>{{ $product['title'] ?? $product['Product_Name'] }}</h4>
         <h2>{{ $product['price'] ?? '₱' . $product['Product_Price'] }}</h2>
@@ -78,19 +158,6 @@
     </div>
 </section>
 
-<div class="container">
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-</div>
 
 
 <div id="sproductfeatures">

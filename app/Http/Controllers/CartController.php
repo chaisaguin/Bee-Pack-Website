@@ -240,10 +240,9 @@ class CartController extends Controller
                 Log::info('New address created:', $address->toArray());
             }
 
-            $order_id = 'ORD' . strtoupper(uniqid());
             
             $order = new Order();
-            $order->user_id = $user_id;
+            $order->customer_id = Auth::user()->Customer_ID;  // Use Customer_ID instead of user_id
             $order->order_id = $order_id;
             $order->status = 'pending';
             $order->subtotal = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->subtotal());
@@ -260,11 +259,16 @@ class CartController extends Controller
             $order->zip = $address->zip;
             $order->save();
 
-            Log::info('Order created:', $order->toArray());
+            Log::info('Order created:', [
+                'customer_id' => $order->customer_id,
+                'order_id' => $order->order_id,
+                'total' => $order->total
+            ]);
+
 
             foreach (Cart::instance($cartInstance)->content() as $item) {
                 $orderItem = new OrderItem();
-                $orderItem->order_id = $order->id;
+                $orderItem->order_id = $order_id;
                 $orderItem->product_id = $item->id;
                 $orderItem->price = $item->price;
                 $orderItem->quantity = $item->qty;

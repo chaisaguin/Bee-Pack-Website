@@ -63,7 +63,7 @@ class AuthController extends Controller
     public function store(Request $request)
     {
         $nextId = Customer::count() + 1;
-        $nextId = str_pad($nextId, 2, STR_PAD_LEFT);
+        $nextId = str_pad($nextId, 2, '0', STR_PAD_LEFT);  // Add padding with zeros
 
         $request->validate([
             'Customer_Name' => 'required|string|max:255',
@@ -75,12 +75,12 @@ class AuthController extends Controller
 
         // Create the customer
         $customer = Customer::create([
-            'Customer_ID' => 'CUST' . $nextId,
+            'Customer_ID' => 'CUST' . $nextId,  // Will generate CUST01, CUST02, etc.
             'Customer_Name' => $request->Customer_Name,
             'Customer_Email' => $request->Customer_Email,
             'Customer_ContactNumber' => $request->Customer_ContactNumber,
             'Customer_Address' => $request->Customer_Address,
-            'Password' => $request->password, // Store plain password
+            'Password' => $request->password,
         ]);
 
         // Log in the customer

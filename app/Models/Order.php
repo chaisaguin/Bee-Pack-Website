@@ -10,8 +10,10 @@ class Order extends Model
     protected $collection = 'customer_order';
 
     protected $fillable = [
-        'user_id',
+        'customer_id',
         'order_id',
+        'Payment_ReferenceCode',
+        'order_item_id',
         'subtotal',
         'total',
         'name',
@@ -36,9 +38,9 @@ class Order extends Model
         'canceled_date' => 'date'
     ];
 
-    public function user()
+    public function customer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Customer::class, 'customer_id', 'Customer_ID');
     }
 
     public function orderItems()

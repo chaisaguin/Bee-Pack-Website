@@ -51,10 +51,11 @@
             </thead>
             <tbody>
                 @foreach($products as $product)
+
                 <tr>
                     <td>
                         <div class="shopping-cart__product-item">
-                            <img loading="lazy" src="{{ asset($product->model->Product_Image ?? 'media/products/f1.png') }}" width="120" height="120" alt="{{ $product->name }}" />
+                            <img loading="lazy" src="{{ asset($product->image_path) }}" width="120" height="120" alt="{{ $product->name }}" />
                         </div>
                     </td>
                     <td>
