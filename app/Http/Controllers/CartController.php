@@ -3,59 +3,117 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use App\Models\Product;
-use App\Models\CustomerOrder;
+use Surfsidemedia\Shoppingcart\Facades\Cart;
+use App\Models\Products;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    /**
-     * Add a product to the cart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-
-     public function cart()
-     {
-        $cart = session()->get('cart', []);
-        return view('frontend.cart', compact('cart'));
-     }
-
-    public function add(Request $request)
+    private function getCartInstance()
     {
-        $cart = session()->get('cart', []); // Get the cart from the session, or initialize an empty array
-        $productId = $request->input('product_id');
-        $quantity = $request->input('quantity', 1);
-    
-        // Check if the product already exists in the cart
-        if (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] += $quantity; // Update quantity
-        } else {
-            // Fetch product details from the database (simplified for example)
-            $product = Product::find($productId);
-            if ($product) {
-                $cart[$productId] = [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'price' => $product->price,
-                    'quantity' => $quantity,
-                ];
-            }
-        }
-    
+        return Auth::check() ? 'cart_' . Auth::id() : 'default';
+    }
 
-        // Save the cart back to the session
-        Session::put('cart', $cart);
+    public function index()
+    {
+        $cartInstance = $this->getCartInstance();
+        $products = Cart::instance($cartInstance)->content();
+        return view('frontend.cart', compact('products'));
+    }
 
-        // Redirect back with a success message
+    public function add_to_cart(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required',
+            'title' => 'required',
+            'price' => 'required',
+            'quantity' => 'required|numeric|min:1'
+        ]);
+
+        $price = floatval(str_replace(['₱', ','], '', $request->price));
+        $productId = $request->product_id;
+        $title = $request->title;
+        $quantity = $request->quantity;
+        
+        $cartInstance = $this->getCartInstance();
+        
+        Cart::instance($cartInstance)->add(
+            $productId,
+            $title,
+            $quantity,
+            $price
+        )->associate(Products::class);
+
+        // Store cart in database
+        Cart::instance($cartInstance)->store($cartInstance);
+
         return redirect()->back()->with('success', 'Product added to cart successfully!');
     }
 
-    /**
-     * Display the cart items.
-     *
-     * @return \Illuminate\View\View
-     */
+    public function mergeCart()
+    {
+        if (Auth::check()) {
+            $guestCart = Cart::instance('default')->content();
+            $userCartInstance = 'cart_' . Auth::id();
 
+            // Restore user's cart from database if exists
+            if (Cart::instance($userCartInstance)->count() == 0) {
+                Cart::instance($userCartInstance)->restore(Auth::id());
+            }
+
+            // Add guest cart items to user cart
+            foreach ($guestCart as $item) {
+                Cart::instance($userCartInstance)->add(
+                    $item->id,
+                    $item->name,
+                    $item->qty,
+                    $item->price
+                )->associate(Products::class);
+            }
+
+            // Store updated cart in database
+            Cart::instance($userCartInstance)->store(Auth::id());
+
+            // Clear guest cart
+            Cart::instance('default')->destroy();
+        }
+    }
+
+    public function restoreCart()
+    {
+        if (Auth::check()) {
+            $cartInstance = 'cart_' . Auth::id();
+            Cart::instance($cartInstance)->restore(Auth::id());
+        }
+    }
+
+    public function removeItem($rowId)
+    {
+        $cartInstance = $this->getCartInstance();
+        Cart::instance($cartInstance)->remove($rowId);
+        
+        // Store updated cart
+        if (Auth::check()) {
+            Cart::instance($cartInstance)->store(Auth::id());
+        }
+
+        return redirect()->back()->with('success', 'Item removed from cart');
+    }
+
+    public function updateQuantity(Request $request, $rowId)
+    {
+        $request->validate([
+            'quantity' => 'required|numeric|min:1'
+        ]);
+
+        $cartInstance = $this->getCartInstance();
+        Cart::instance($cartInstance)->update($rowId, $request->quantity);
+
+        // Store updated cart
+        if (Auth::check()) {
+            Cart::instance($cartInstance)->store(Auth::id());
+        }
+
+        return redirect()->back()->with('success', 'Cart updated successfully');
+    }
 }

@@ -7,6 +7,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/a-cart.css') }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     
     @yield('extra-css')
@@ -19,6 +20,10 @@
 
     <script src="{{ asset('js/main.js') }}"></script>
     @yield('extra-js')
+
+
+    
+    </div>
 </body>
 </html>
 

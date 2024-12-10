@@ -27,16 +27,37 @@
         <h2>{{ $product['price'] ?? '₱' . $product['Product_Price'] }}</h2>
 
 
-        <input type="number" value="1">
 
-       <form action="{{ route('cart.add') }}" method="POST">
+        <!--ADD TO CART BUTTON AND FORMS-->
+        <form action="{{ route('cart.add') }}" method="POST">
             @csrf
-            <input type="hidden" name="product_id" value="{{ $product['id'] ?? $product['Product_ID'] }}">
-            <input type="hidden" name="quantity" value="1">
+            <!-- Quantity Control -->
+            <div class="quantity-control">
+                <button 
+                type="button" 
+                class="quantity-decrease normal" 
+                aria-label="Decrease quantity"
+                style="margin: 5px"> - </button>
+                
+                <input type="number" name="quantity" value="1" min="1" style="text-align: center;">
+        
+                <button type="button" class="quantity-increase normal" aria-label="Increase quantity"> + </button>
+            </div>
+            
+            <!-- Product ID -->
+            <!-- Product Information -->
+            <input type="hidden" name="product_id" value="{{ $product['Product_ID'] }}" />
+            <input type="hidden" name="title" value="{{ $product['Product_Name'] }}" />
+            <input type="hidden" name="price" value="{{ str_replace(['₱', ','], '', $product['Product_Price']) }}" />
+
+
+            <!-- Submit Button -->
             <button type="submit" class="normal">
-                <i class='bx bx-cart'></i> Add To Cart
+                <i class='bx bx-cart'></i> 
+                Add To Cart
             </button>
         </form>
+
 
 
         <hr class="solid">
@@ -62,6 +83,21 @@
         </p>
     </div>
 </section>
+
+<div class="container">
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+</div>
+
 
 <div id="sproductfeatures">
     <section id="product1" class="section-p1">
@@ -110,5 +146,25 @@
     smallimg[2].onclick = function() {
         MainImg.src = smallimg[2].src;
     }
+
+        // Quantity Control JavaScript
+    document.querySelectorAll('.quantity-control').forEach(control => {
+        const input = control.querySelector('.quantity-input');
+        const increaseBtn = control.querySelector('.quantity-increase');
+        const decreaseBtn = control.querySelector('.quantity-decrease');
+
+        // Increase Quantity
+        increaseBtn.addEventListener('click', () => {
+            input.value = parseInt(input.value) + 1;
+        });
+
+        // Decrease Quantity
+        decreaseBtn.addEventListener('click', () => {
+            if (parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        });
+    });
+
 </script>
 @endsection

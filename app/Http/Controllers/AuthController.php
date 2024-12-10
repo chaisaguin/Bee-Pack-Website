@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
+use Surfsidemedia\Shoppingcart\Facades\Cart;
 
 class AuthController extends Controller
 {
@@ -40,6 +41,9 @@ class AuthController extends Controller
             
             // Regenerate session for security
             $request->session()->regenerate();
+
+            // Merge and restore cart data
+            app(CartController::class)->mergeCart();
 
             // Redirect to account page after successful login
             return redirect()->route('customer.account')->with('success', 'Login successful!');

@@ -26,7 +26,7 @@
     <div class="col">
         <h4>My Account</h4>
         <a href="#">Sign in</a>
-        <a href="{{ route('cart') }}">View Cart</a>
+        <a href="{{ route('cart.index') }}">View Cart</a>
         <a href="#">Track My Order</a>
         <a href="#">Help</a>
     </div>

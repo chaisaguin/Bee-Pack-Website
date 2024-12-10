@@ -1,3 +1,4 @@
+
 <section id="header">
     <a href="{{ route('home') }}"><img src="{{ asset('media/long-logo-small.png') }}" class="logo"></a>
 
@@ -6,8 +7,9 @@
             <li><a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
             <li><a class="{{ request()->routeIs('shop') ? 'active' : '' }}" href="{{ route('shop') }}">Shop</a></li>
             <li><a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a></li>
-            <li><a class="{{ request()->routeIs('cart') ? 'active' : '' }}" href="{{ route('cart') }}"><i class='bx bx-cart-alt'></i></a></li>
+            <li><a class="{{ request()->routeIs('cart') ? 'active' : '' }}" href="{{ route('cart.index') }}"><i class='bx bx-cart-alt'></i></a></li>
             
+
             @if(auth()->check())
                 <li><a class="{{ request()->routeIs('customer.account') ? 'active' : '' }}" href="{{ route('customer.account') }}">
                     <i class='bx bx-user-circle'></i>
@@ -35,7 +37,7 @@
         @else
             <a href="{{ route('login') }}"><i class='bx bx-user-circle'></i></a>
         @endif
-        <a href="{{ route('cart') }}"><i class='bx bx-cart-alt'></i></a>
+        <a href="{{ route('cart.index') }}"><i class='bx bx-cart-alt'></i></a>
         <i id="bar" class='bx bx-menu'></i>
     </div>
 </section>

@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CartController;
 use Illuminate\Container\Attributes\Auth;
 
+
 // Both '/' and '/home' will show the home page
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/home', [FrontendController::class, 'home']);
@@ -14,8 +15,8 @@ Route::get('/shop', [FrontendController::class, 'shop'])->name('shop');
 Route::get('/about', [FrontendController::class, 'about'])->name('about');
 
 // Cart Routes
-Route::get('/cart', [CartController::class, 'cart'])->name('cart');
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add_to_cart'])->name('cart.add');
 
 // Product Routes
 Route::get('/product', [FrontendController::class, 'product'])->name('product');
