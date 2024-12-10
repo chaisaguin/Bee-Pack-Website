@@ -36,8 +36,39 @@
                         @foreach($orders as $order)
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Order #{{ $order->order_id }}
-                                <span class="badge badge-primary badge-pill">{{ ucfirst($order->status) }}</span>
-                                <button class="btn btn-sm btn-outline-secondary ml-3" @if($order->status !== 'Delivered') disabled @endif>Feedback</button>
+                                <span class="badge badge-primary badge-pill">{{ ucfirst($order->Order_Status) }}</span>
+                                <button class="btn btn-sm btn-outline-secondary ml-3" @if($order->Order_Status !== 'Delivered') disabled @endif data-toggle="modal" data-target="#feedbackModal{{ $order->order_id }}">Feedback</button>
+
+                                <!-- Feedback Modal -->
+                                <div class="modal fade" id="feedbackModal{{ $order->order_id }}" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel{{ $order->order_id }}" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="feedbackModalLabel{{ $order->order_id }}">Provide Feedback for Order #{{ $order->order_id }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{{ route('feedback.submit', $order->order_id) }}" method="POST">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="rating">Rating</label>
+                                                        <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="comments">Comments</label>
+                                                        <textarea class="form-control" id="comments" name="comments" rows="3"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
                         @endforeach
                     </ul>

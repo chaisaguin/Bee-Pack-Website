@@ -242,7 +242,7 @@ class CartController extends Controller
             $order = new Order();
             $order->customer_id = Auth::user()->Customer_ID;  // Use Customer_ID instead of user_id
             $order->order_id = $order_id = Session::get('checkout.order_id');
-            $order->status = 'pending';
+            $order->Order_Status = 'pending';
             $order->subtotal = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->subtotal());
             $order->tax = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->tax());
             $order->total = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->total());

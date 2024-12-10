@@ -26,7 +26,7 @@ class Order extends Model
         'landmark',
         'zip',
         'type',
-        'status',
+        'Order_Status',
         'is_shipping_different',
         'delivered_date',
         'canceled_date'
