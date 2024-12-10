@@ -4,6 +4,7 @@
 
 @section('content')
 <section id="prodetails" class="section-p1">
+    
     <div class="single-pro-image">
         <img src="{{ asset($product['image_path'] ?? 'media/products/default.png') }}" width="100%" id="MainImg" alt="Product Image">
         <div class="small-img-group">
@@ -33,15 +34,9 @@
             @csrf
             <!-- Quantity Control -->
             <div class="quantity-control">
-                <button 
-                type="button" 
-                class="quantity-decrease normal" 
-                aria-label="Decrease quantity"
-                style="margin: 5px"> - </button>
-                
-                <input type="number" name="quantity" value="1" min="1" style="text-align: center;">
-        
-                <button type="button" class="quantity-increase normal" aria-label="Increase quantity"> + </button>
+                <button type="button" class="qty-btn minus" aria-label="Decrease quantity">-</button>
+                <input type="number" name="quantity" value="1" min="1" class="qty-input">
+                <button type="button" class="qty-btn plus" aria-label="Increase quantity">+</button>
             </div>
             
             <!-- Product ID -->
@@ -52,8 +47,7 @@
 
 
             <!-- Submit Button -->
-            <button type="submit" class="normal">
-                <i class='bx bx-cart'></i> 
+            <button type="submit" class="normal"> 
                 Add To Cart
             </button>
         </form>
@@ -149,9 +143,9 @@
 
         // Quantity Control JavaScript
     document.querySelectorAll('.quantity-control').forEach(control => {
-        const input = control.querySelector('.quantity-input');
-        const increaseBtn = control.querySelector('.quantity-increase');
-        const decreaseBtn = control.querySelector('.quantity-decrease');
+        const input = control.querySelector('.qty-input');
+        const increaseBtn = control.querySelector('.qty-btn.plus');
+        const decreaseBtn = control.querySelector('.qty-btn.minus');
 
         // Increase Quantity
         increaseBtn.addEventListener('click', () => {

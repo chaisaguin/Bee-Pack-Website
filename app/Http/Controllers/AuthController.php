@@ -63,7 +63,7 @@ class AuthController extends Controller
     public function store(Request $request)
     {
         $nextId = Customer::count() + 1;
-        $nextId = str_pad($nextId, 8, '0', STR_PAD_LEFT);
+        $nextId = str_pad($nextId, 2, STR_PAD_LEFT);
 
         $request->validate([
             'Customer_Name' => 'required|string|max:255',
@@ -85,9 +85,6 @@ class AuthController extends Controller
 
         // Log in the customer
         Auth::login($customer);
-
-        // Cache the customer data for 10 minutes
-        Cache::put('customer_' . $customer->Customer_ID, $customer, 600); // Cache for 10 minutes
 
         return redirect()->route('customer.account')->with('success', 'Registration successful!');
     }

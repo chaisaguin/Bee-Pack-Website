@@ -94,7 +94,7 @@ class CartController extends Controller
         
         // Store updated cart
         if (Auth::check()) {
-            Cart::instance($cartInstance)->store(Auth::id());
+            Cart::instance($cartInstance)->store($cartInstance);
         }
 
         return redirect()->back()->with('success', 'Item removed from cart');
@@ -116,4 +116,22 @@ class CartController extends Controller
 
         return redirect()->back()->with('success', 'Cart updated successfully');
     }
+
+    public function increase_cart_quantity($rowId)
+        {
+            $product = Cart::instance('cart')->get($rowId);
+            $qty = $product->qty + 1;
+            Cart::instance('cart')->update($rowId, $qty);
+            return redirect()->back();
+        }
+
+    public function decrease_cart_quantity($rowId)
+        {
+            $product = Cart::instance('cart')->get($rowId);
+            $qty = $product->qty - 1;
+            Cart::instance('cart')->update($rowId, $qty);
+            return redirect()->back();
+        }
+
+
 }

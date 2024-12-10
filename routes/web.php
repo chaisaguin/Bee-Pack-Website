@@ -17,6 +17,10 @@ Route::get('/about', [FrontendController::class, 'about'])->name('about');
 // Cart Routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add_to_cart'])->name('cart.add');
+Route::delete('/cart/remove/{rowId}', [CartController::class, 'removeItem'])->name('cart.remove');
+Route::put('/cart/update/{rowId}', [CartController::class, 'updateQuantity'])->name('cart.update');
+Route::post('/cart/increase/{rowId}', [CartController::class, 'increase_cart_quantity'])->name('cart.increase');
+Route::post('/cart/decrease/{rowId}', [CartController::class, 'decrease_cart_quantity'])->name('cart.decrease');
 
 // Product Routes
 Route::get('/product', [FrontendController::class, 'product'])->name('product');

@@ -1,8 +1,9 @@
-@extends('frontend.master')
+@extends('frontend.master1')
 
 @section('title', 'Cart')
 
 @section('content')
+
 <section id="cart-header-yellow">
             <h2>Your Shopping Cart</h2>
             <p>Almost Yours! Complete Your Order Now.</p>
@@ -10,8 +11,8 @@
 
 
 <main class="pt-90">
-    <section class="shop-checkout container">
-        <div class="checkout-steps">
+<section class="shop-checkout container">
+    <div class="checkout-steps">
         <a href="{{ route('cart.index') }}" class="checkout-steps__item active">
           <span class="checkout-steps__item-number">01</span>
           <span class="checkout-steps__item-title">
@@ -19,97 +20,143 @@
             <em>Manage Your Items List</em>
           </span>
         </a>
-        <a href="{{ route('cart.index') }}" class="checkout-steps__item">
+        <a href="checkout.html" class="checkout-steps__item">
           <span class="checkout-steps__item-number">02</span>
           <span class="checkout-steps__item-title">
             <span>Shipping and Checkout</span>
             <em>Checkout Your Items List</em>
           </span>
         </a>
-        <a href="{{ route('cart.index') }}" class="checkout-steps__item">
+        <a href="order-confirmation.html" class="checkout-steps__item">
           <span class="checkout-steps__item-number">03</span>
           <span class="checkout-steps__item-title">
             <span>Confirmation</span>
             <em>Review And Submit Your Order</em>
           </span>
         </a>
+      </div>
+
+<div class="shopping-cart">
+    <div class="cart-table__wrapper">
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th></th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($products as $product)
+                <tr>
+                    <td>
+                        <div class="shopping-cart__product-item">
+                            <img loading="lazy" src="{{ asset($product->model->Product_Image ?? 'media/products/f1.png') }}" width="120" height="120" alt="{{ $product->name }}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="shopping-cart__product-item__detail">
+                            <h4>{{ $product->name }}</h4>
+                            <ul class="shopping-cart__product-item__options">
+                                <li>{{ $product->Product_Description }}</li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="shopping-cart__product-price">${{ $product->price }}</span>
+                    </td>
+                    <td>
+                        <div class="qty-control">
+                            <button type="button" class="qty-btn minus" onclick="c('{{ $product->rowId }}', {{ $product->qty - 1 }})">-</button>
+                            <input type="number" name="quantity" value="{{ $product->qty }}" min="1" 
+                                   class="qty-input" 
+                                   onchange="updateCart('{{ $product->rowId }}', this.value)">
+                            <button type="button" class="qty-btn plus" onclick="updateCart('{{ $product->rowId }}', {{ $product->qty + 1 }})">+</button>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="shopping-cart__subtotal">${{ $product->subtotal }}</span>
+                    </td>
+
+                    <form method="POST" action="{{ route('cart.remove', ['rowId' => $product->rowId]) }}">
+                        @csrf
+                        @method('DELETE')
+                    <td>
+                        <button type="submit" class="remove-cart">
+                            <i class='bx bx-x-circle'></i>
+                        </button>
+                    </td>
+                    </form>
+                </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div class="cart-table-footer">
+                            <button class="btn btn-light">Update Cart</button>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="shopping-cart__totals-wrapper">
+        <div class="shopping-cart__totals">
+            <h3>Cart Totals</h3>
+            <table class="cart-totals">
+                <tr>
+                    <th>Subtotal</th>
+                    <td>${{ Cart::subtotal() }}</td>
+                </tr>
+                <tr>
+                    <th>Shipping</th>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shipping" id="free_shipping" value="free">
+                            <label for="free_shipping">Free Shipping</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shipping" id="flat_rate" value="flat">
+                            <label for="flat_rate">Flat Rate: $49</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shipping" id="local_pickup" value="pickup">
+                            <label for="local_pickup">Local Pickup: $8</label>
+                        </div>
+                        <div>Shipping to AL.</div>
+                        <div>
+                            <a href="#" class="menu-link">Change Address</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>VAT</th>
+                    <td>${{ Cart::tax() }}</td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <td>${{ Cart::total() }}</td>
+                </tr>
+            </table>
+            <div class="checkout-btn-wrapper">
+                <a href="{{ route('cart.index') }}" class="btn btn-primary btn-checkout">Proceed to Checkout</a>
+            </div>
         </div>
+    </div>
+</div>
 
-        <div class="section-p1" id="cart">
-            @if($products->count() > 0)
-                <div class="cart-table__wrapper">
-                    <table width="100%">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th></th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Subtotal</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($products as $product)
-                                <tr>
-                                    <td>
-                                        <img src="{{ asset($product->model->Product_Image ?? 'media/products/f1.png') }}" alt="{{ $product->name }}" width="120">
-                                    </td>
-                                    <td>
-                                        <p>{{ $product->name }} , {{ $product->Product_Description }}</p>
-                                    </td>
-                                    <td>${{ $product->price }}</td>
-                                    <td>
-                                        <input type="number" name="quantity" value="{{ $product->qty }}" min="1" 
-                                               class="qty-control__number text-center" 
-                                               onchange="updateCart('{{ $product->rowId }}', this.value)">
-                                    </td>
-                                    <td>${{ $product->subtotal }}</td>
-                                    <td>
-                                        <a href="{{ route('cart.index', $product->rowId) }}" class="remove-cart">Remove</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="shopping-cart__totals-wrapper">
-                    <h3>Cart Totals</h3>
-                    <table class="cart-totals">
-                        <tr>
-                            <th>Subtotal</th>
-                            <td>${{ Cart::subtotal() }}</td>
-                        </tr>
-                        <tr>
-                            <th>Shipping</th>
-                            <td>Free</td>
-                        </tr>
-                        <tr>
-                            <th>VAT</th>
-                            <td>${{ Cart::tax() }}</td>
-                        </tr>
-                        <tr>
-                            <th>Total</th>
-                            <td>${{ Cart::total() }}</td>
-                        </tr>
-                    </table>
-                    <a href="{{ route('cart.index') }}">
-                        <button class="normal">Proceed to Checkout</button>
-                    </a>
-
-                    
-                </div>
-            @else
-                <div class="container text-center">
-                    <img src="{{ asset('images/empty_cart.png') }}" alt="Empty Cart" class="img-fluid mb-4">
-                    <h2>Your Cart is Empty</h2>
-                    <p>Looks like you haven’t added anything to your cart yet.</p>
-                    <a href="{{ route('shop') }}" class="normal">Continue Shopping</a>
-                </div>
-            @endif
-        </div>
-    </section>
+</section>
 </main>
+
+<script>
+    $('.remove-cart').on('click', function() {
+        $(this).closest('form').submit();
+    });
+</script>
 
 @endsection
