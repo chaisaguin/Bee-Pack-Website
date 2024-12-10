@@ -140,19 +140,33 @@ class CartController extends Controller
         }
 
 
-    public function checkout() {
-        if(!Auth::check())
-        {
+    public function checkout()
+    {
+        if (!Auth::check()) {
             return redirect()->route('login');
         }
 
         $cartInstance = $this->getCartInstance();
         $cart = Cart::instance($cartInstance);
+
+        if ($cart->count() == 0) {
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty');
+        }
         
         // For MongoDB, we use _id instead of id
         $address = Address::where('user_id', (string)Auth::user()->_id)
                          ->where('is_default', true)
                          ->first();
+
+        // Set up checkout data
+        $order_id = 'ORD' . strtoupper(uniqid());
+        Session::put('checkout', [
+            'order_id' => $order_id,
+            'status' => 'pending',
+            'subtotal' => $cart->subtotal(),
+            'tax' => $cart->tax(),
+            'total' => $cart->total()
+        ]);
                          
         return view('frontend.checkout', [
             'address' => $address,
@@ -167,7 +181,7 @@ class CartController extends Controller
         try {
             // Validate the request
             $validated = $request->validate([
-                'mode' => 'required|in:online_banking,cod,gcash,e_wallet'
+                'mode' => 'required|in:cod,card,e_wallet'
             ]);
 
             if (!Auth::check()) {
@@ -175,18 +189,25 @@ class CartController extends Controller
             }
 
             $user_id = Auth::user()->_id;
+            $cartInstance = $this->getCartInstance();
             
             // Debug information
             Log::info('Checkout Debug:', [
                 'user_id' => $user_id,
                 'payment_mode' => $request->mode,
-                'session_data' => Session::get('checkout')
+                'cart_data' => Cart::instance($cartInstance)->content()
             ]);
 
+            // Validate cart is not empty
+            if (Cart::instance($cartInstance)->count() == 0) {
+                throw new \Exception('Your cart is empty');
+            }
+
+            // Get or create address
             $address = Address::where('user_id', $user_id)
                 ->where('is_default', true)
                 ->first();
-            
+
             if(!$address) {
                 $validated = $request->validate([
                     'name' => 'required',
@@ -199,8 +220,11 @@ class CartController extends Controller
                     'phone' => 'required',
                 ]);
 
+                $order_id = 'ORD' . strtoupper(uniqid());
+                
                 $address = new Address();
                 $address->user_id = $user_id;
+                $address->order_id = $order_id;
                 $address->name = $request->name;
                 $address->address = $request->address;
                 $address->landmark = $request->landmark;
@@ -214,34 +238,16 @@ class CartController extends Controller
 
                 Log::info('New address created:', $address->toArray());
             }
+
+            $order_id = 'ORD' . strtoupper(uniqid());
             
-            $cartInstance = $this->getCartInstance();
-            if (!Cart::instance($cartInstance)->count()) {
-                return redirect()->route('cart.index')->with('error', 'Your cart is empty');
-            }
-
-            // Check if checkout session exists
-            if (!Session::has('checkout')) {
-                $this->setAmountForCheckout();
-            }
-
-            $checkoutData = Session::get('checkout');
-            if (!$checkoutData) {
-                throw new \Exception('Checkout data is missing');
-            }
-
-            Log::info('Creating order with data:', [
-                'user_id' => $user_id,
-                'checkout_data' => $checkoutData
-            ]);
-
             $order = new Order();
             $order->user_id = $user_id;
-            $order->order_id = $checkoutData['order_id'];
-            $order->status = $checkoutData['status'];
-            $order->subtotal = $checkoutData['subtotal'];
-            $order->tax = $checkoutData['tax'];
-            $order->total = $checkoutData['total'];
+            $order->order_id = $order_id;
+            $order->status = 'pending';
+            $order->subtotal = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->subtotal());
+            $order->tax = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->tax());
+            $order->total = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->total());
             $order->name = $address->name;
             $order->phone = $address->phone;
             $order->locality = $address->locality ?? null;
@@ -257,26 +263,23 @@ class CartController extends Controller
 
             foreach (Cart::instance($cartInstance)->content() as $item) {
                 $orderItem = new OrderItem();
-                $orderItem->product_id = $item->id;
                 $orderItem->order_id = $order->id;
+                $orderItem->product_id = $item->id;
                 $orderItem->price = $item->price;
                 $orderItem->quantity = $item->qty;
+                $orderItem->options = $item->options;
                 $orderItem->save();
             }
 
             $transaction = new Transaction();
-            $transaction->user_id = $order->user_id;
+            $transaction->user_id = $user_id;
             $transaction->order_id = $order->id;
-            
             switch($request->mode) {
-                case 'online_banking':
-                    $transaction->mode = 'online_bank';
-                    break;
                 case 'cod':
-                    $transaction->mode = 'cash_on_delivery';
+                    $transaction->mode = 'cod';
                     break;
-                case 'gcash':
-                    $transaction->mode = 'gcash';
+                case 'card':
+                    $transaction->mode = 'card';
                     break;
                 case 'e_wallet':
                     $transaction->mode = 'e_wallet';
@@ -299,8 +302,7 @@ class CartController extends Controller
                 'exception' => $e,
                 'request_data' => $request->all(),
                 'user_id' => Auth::id(),
-                'cart_content' => Cart::instance($this->getCartInstance())->content(),
-                'session_data' => Session::all()
+                'cart_content' => Cart::instance($this->getCartInstance())->content()
             ]);
             return back()->with('error', 'An error occurred while placing your order: ' . $e->getMessage());
         }
@@ -319,13 +321,16 @@ class CartController extends Controller
 
     public function setAmountForCheckout()
     {
-        if (Cart::instance('cart')->content()->count() > 0) {
+        if (Cart::instance('cart')->content()->count() == 0) {
             Session::forget('checkout');
             return;
         }
 
+        $order_id = 'ORD' . strtoupper(uniqid());
+        
         Session::put('checkout', [
-            'discount' => 0,
+            'order_id' => $order_id,
+            'status' => 'pending',
             'subtotal' => Cart::instance('cart')->subtotal(),
             'tax' => Cart::instance('cart')->tax(),
             'total' => Cart::instance('cart')->total(),

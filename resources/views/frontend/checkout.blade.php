@@ -34,7 +34,9 @@
           </span>
         </a>
       </div>
-      <form action="{{ route('cart.place-an-order') }}" method="POST">
+
+
+    <form action="{{ route('cart.place-an-order') }}" method="POST">
         @csrf
         <div class="checkout-form">
           @if(session('error'))
@@ -63,19 +65,53 @@
                         <div class="my-account__address-list">
                             <div class="my-account__address-list-item">
                                 <div class="my-account__address-item__detail">
-                                    <p>{{ $address->name }}</p>
-                                    <p>{{ $address->address }}</p>
-                                    <p>{{ $address->landmark }}</p>
-                                    <p>{{ $address->city }}, {{ $address->state }}, {{ $address->country }}</p>
-                                    <p>{{ $address->zip }}</p>
-                                    <br>
-                                    <p>{{ $address->phone }}</p>
+                                    <div class="form-floating my-3">
+                                        <input type="text" class="form-control" name="name" required="" value="{{ $address->name }}">
+                                        <label for="name">Full Name *</label>
+                                    </div>
+                                    <div class="form-floating my-3">
+                                        <input type="text" class="form-control" name="address" required="" value="{{ $address->address }}">
+                                        <label for="address">Address *</label>
+                                    </div>
+                                    <div class="form-floating my-3">
+                                        <input type="text" class="form-control" name="landmark" required="" value="{{ $address->landmark }}">
+                                        <label for="landmark">Landmark *</label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-floating my-3">
+                                                <input type="text" class="form-control" name="city" required="" value="{{ $address->city }}">
+                                                <label for="city">City *</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-floating my-3">
+                                                <input type="text" class="form-control" name="state" required="" value="{{ $address->state }}">
+                                                <label for="state">State *</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-floating my-3">
+                                                <input type="text" class="form-control" name="country" required="" value="{{ $address->country }}">
+                                                <label for="country">Country *</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-floating my-3">
+                                        <input type="text" class="form-control" name="zip" required="" value="{{ $address->zip }}">
+                                        <label for="zip">ZIP Code *</label>
+                                    </div>
+                                    <div class="form-floating my-3">
+                                        <input type="text" class="form-control" name="phone" required="" value="{{ $address->phone }}">
+                                        <label for="phone">Phone Number *</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             @else
+
                 <div class="row mt-5">
                     <div class="col-md-6">
                         <div class="form-floating my-3">
@@ -163,7 +199,7 @@
                     @foreach(Cart::content() as $item)
                     <tr>
                       <td>{{ $item->name }} x {{ $item->qty }}</td>
-                      <td align="right">${{ $item->subtotal }}</td>
+                      <td align="right">₱{{ $item->subtotal }}</td>
                     </tr>
                     @endforeach
                   </tbody>
@@ -172,7 +208,7 @@
                   <tbody>
                     <tr>
                       <th>SUBTOTAL</th>
-                      <td align="right">${{ Cart::subtotal() }}</td>
+                      <td align="right">₱{{ Cart::subtotal() }}</td>
                     </tr>
                     <tr>
                       <th>SHIPPING</th>
@@ -180,11 +216,11 @@
                     </tr>
                     <tr>
                       <th>VAT</th>
-                      <td align="right">${{ Cart::tax() }}</td>
+                      <td align="right">₱{{ Cart::tax() }}</td>
                     </tr>
                     <tr>
                       <th>TOTAL</th>
-                      <td align="right">${{ Cart::total() }}</td>
+                      <td align="right">₱{{ Cart::total() }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -241,7 +277,9 @@
             </div>
           </div>
         </div>
-      </form>
+    </form>
+
+
     </section>
 </main>
 @endsection

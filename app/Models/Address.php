@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
-use App\Models\User;
 
 class Address extends Model
 {
@@ -12,6 +11,7 @@ class Address extends Model
 
     protected $fillable = [
         'user_id',
+        'order_id',
         'name',
         'phone',
         'locality',

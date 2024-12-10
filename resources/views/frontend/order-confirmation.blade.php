@@ -1,4 +1,4 @@
-@extends('frontend.layouts.main')
+@extends('frontend.master1')
 
 @section('content')
 <section class="order-confirmation py-5">
@@ -14,8 +14,8 @@
                         @if(isset($order))
                         <div class="order-details mt-4">
                             <h4>Order Details</h4>
-                            <p>Order ID: {{ $order->id }}</p>
-                            <p>Total Amount: ₱{{ number_format($order->total, 2) }}</p>
+                            <p>Order ID: {{ $order->order_id }}</p>
+                            <p>Total Amount: ₱{{ number_format((float)$order->total, 2) }}</p>
                             <p>Status: {{ ucfirst($order->status ?? 'Pending') }}</p>
                         </div>
                         @endif
