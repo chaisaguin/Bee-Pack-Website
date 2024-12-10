@@ -2,21 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class OrderItem extends Model
 {
-    use HasFactory;
+    protected $connection = 'mongodb';
+    protected $collection = 'order_items';
 
     protected $fillable = [
-        'Order_Item_ID', 'Order_ID', 'Product_ID', 'Quantity', 
-        'Unit_Price', 'Total_Price', 'Added_Date'
+        'product_id',
+        'order_id',
+        'price',
+        'quantity',
+        'options',
+        'rstatus'
     ];
 
-    // Define relationships if needed, e.g., with CustomerOrder
+    protected $casts = [
+        'rstatus' => 'boolean',
+        'options' => 'array'
+    ];
+
     public function order()
     {
-        return $this->belongsTo(CustomerOrder::class, 'Order_ID', 'Order_ID');
+        return $this->belongsTo(Order::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

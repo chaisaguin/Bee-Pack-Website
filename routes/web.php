@@ -22,10 +22,14 @@ Route::put('/cart/update/{rowId}', [CartController::class, 'updateQuantity'])->n
 Route::post('/cart/increase/{rowId}', [CartController::class, 'increase_cart_quantity'])->name('cart.increase');
 Route::post('/cart/decrease/{rowId}', [CartController::class, 'decrease_cart_quantity'])->name('cart.decrease');
 
+// Checkout Routes
+Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::post('/place-an-order', [CartController::class, 'place_an_order'])->name('cart.place-an-order');
+Route::get('/order-confirmation/{orderId}', [CartController::class, 'order_confirmation'])->name('cart.order-confirmation');
+
 // Product Routes
 Route::get('/product', [FrontendController::class, 'product'])->name('product');
 Route::get('/product/{id}', [FrontendController::class, 'product'])->name('product');
-Route::get('/test-mongodb', [ProductsController::class, 'testMongoDB']);
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -46,5 +50,14 @@ Route::get('/email/verify/{id}', [AuthController::class, 'verifyEmail'])
     ->name('verification.verify');
 
 // product routes
-    Route::post('/products', [ProductsController::class, 'store']);
-    Route::put('/products/{id}', [ProductsController::class, 'update']);
+Route::post('/products', [ProductsController::class, 'store']);
+Route::put('/products/{id}', [ProductsController::class, 'update']);
+
+Route::get('/test-mongodb', function () {
+    try {
+        $address = \App\Models\Address::first();
+        return response()->json(['success' => true, 'data' => $address]);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'error' => $e->getMessage()]);
+    }
+});

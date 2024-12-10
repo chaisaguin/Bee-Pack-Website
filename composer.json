@@ -7,11 +7,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "jenssegers/mongodb": "*",
         "laravel/cashier": "^15.5",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
-        "mongodb/laravel-mongodb": "*",
+        "mongodb/laravel-mongodb": "^5.1",
         "stripe/stripe-php": "^16.3",
         "surfsidemedia/shoppingcart": "^1.0"
     },
