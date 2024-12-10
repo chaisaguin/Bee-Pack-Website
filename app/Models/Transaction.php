@@ -10,7 +10,7 @@ class Transaction extends Model
     protected $collection = 'transactions';
 
     protected $fillable = [
-        'user_id',
+        'customer_id',
         'order_id',
         'mode',
         'status',
