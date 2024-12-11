@@ -7,7 +7,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body text-center">
-                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                        <i class='bx bxs-check-circle text-success' style="font-size: 4rem;"></i>
                         <h2 class="mt-4">Thank You for Your Order!</h2>
                         <p class="lead">Your order has been successfully placed.</p>
                         

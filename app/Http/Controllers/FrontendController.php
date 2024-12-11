@@ -119,9 +119,13 @@ class FrontendController extends Controller
 
             Log::info('Submitting feedback for user: ' . Auth::user()->Customer_ID);
 
+            // Get the next Feedback_ID
+            $lastFeedback = $collection->findOne([], ['sort' => ['Feedback_ID' => -1]]);
+            $nextId = $lastFeedback ? intval(substr($lastFeedback['Feedback_ID'], 4)) + 1 : 1;
+
             // Insert feedback into the database
             $collection->insertOne([
-                'Feedback_ID' => uniqid('FDBK'),
+                'Feedback_ID' => 'FDBK' . $nextId,
                 'Customer_ID' => Auth::user()->Customer_ID,
                 'Employee_ID' => null, // Assuming employee ID is not available
                 'Customer_Rating' => $validatedData['rating'],
