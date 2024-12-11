@@ -32,6 +32,14 @@
         <div class="col-md-6">
             <div class="card p-4 mb-4" style="border-radius: 5px;">
                 <h3 class="text-center mb-4">Order Status & Feedback</h3>
+                @if(session()->has('feedback_sent'))
+                    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                        FEEDBACK SENT
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 @if($orders->isEmpty())
                     <p>No orders found.</p>
                 @else
@@ -39,8 +47,12 @@
                         @foreach($orders as $order)
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Order #{{ $order->order_id }}
-                                <span class="badge badge-primary badge-pill">{{ ucfirst($order->Order_Status) }}</span>
-                                <button class="btn btn-sm btn-outline-secondary ml-3" @if($order->Order_Status !== 'Delivered') disabled @endif data-toggle="modal" data-target="#feedbackModal{{ $order->order_id }}">Feedback</button>
+                                <span class="badge badge-pill {{ $order->Order_Status == 'Delivered' ? 'badge-success' : ($order->Order_Status == 'Shipped' ? 'badge-info' : 'badge-primary') }}">{{ ucfirst($order->Order_Status) }}</span>
+                                <button class="btn btn-sm {{ $order->feedback_submitted ? 'btn-success' : 'btn-outline-secondary' }} ml-3"
+                                        @if($order->feedback_submitted || $order->Order_Status != 'Delivered') disabled @endif
+                                        data-toggle="modal" data-target="#feedbackModal{{ $order->order_id }}">
+                                    {{ $order->feedback_submitted ? 'Sent Review' : 'Feedback' }}
+                                </button>
 
                                 <!-- Feedback Modal -->
                                 <div class="modal fade" id="feedbackModal{{ $order->order_id }}" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel{{ $order->order_id }}" aria-hidden="true">
@@ -116,6 +128,20 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if ({{ session('feedback_sent') ? 'true' : 'false' }}) {
+            const alert = document.querySelector('.alert-success');
+            if (alert) {
+                alert.style.display = 'block';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 4500); // Hide after 4.5 seconds
+            }
+        }
+    });
+</script>
 
 <style>
     body {
