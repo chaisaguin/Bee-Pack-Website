@@ -10,11 +10,10 @@ class Address extends Model
     protected $collection = 'addresses';
 
     protected $fillable = [
-        'user_id',
+        'Customer_ID',
         'order_id',
         'name',
         'phone',
-        'locality',
         'address',
         'city',
         'state',

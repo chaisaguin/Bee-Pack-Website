@@ -155,7 +155,7 @@ class CartController extends Controller
         }
         
         // For MongoDB, we use _id instead of id
-        $address = Address::where('user_id', (string)Auth::user()->_id)
+        $address = Address::where('customer_id', Auth::user()->Customer_ID)
                          ->where('is_default', true)
                          ->first();
 
@@ -204,7 +204,7 @@ class CartController extends Controller
             }
 
             // Get or create address
-            $address = Address::where('user_id', $user_id)
+            $address = Address::where('customer_id', $user_id)
                 ->where('is_default', true)
                 ->first();
 
@@ -221,7 +221,7 @@ class CartController extends Controller
                 ]);
 
                 $address = new Address();
-                $address->user_id = $user_id;
+                $address->customer_id = Auth::user()->Customer_ID;
                 $address->order_id = $order_id =  Session::get('checkout.order_id');
                 $address->name = $request->name;
                 $address->address = $request->address;
@@ -248,7 +248,6 @@ class CartController extends Controller
             $order->total = (float) str_replace(['₱', ','], '', Cart::instance($cartInstance)->total());
             $order->name = $address->name;
             $order->phone = $address->phone;
-            $order->locality = $address->locality ?? null;
             $order->address = $address->address;
             $order->city = $address->city;
             $order->state = $address->state;
