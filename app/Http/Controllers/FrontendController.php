@@ -98,6 +98,14 @@ class FrontendController extends Controller
 
     public function submit_feedback(Request $request)
     {
+        if (!Auth::check()) {
+            Log::error('User not authenticated.');
+            return redirect()->route('login')->with('error', 'Please log in to submit feedback.');
+        }
+
+        $user = Auth::user();
+        Log::info('Authenticated user: ' . $user->Customer_ID);
+
         // Validate the request data
         $validatedData = $request->validate([
             'rating' => 'required|integer|min:1|max:5',
@@ -107,7 +115,7 @@ class FrontendController extends Controller
         try {
             // Connect to MongoDB
             $client = new \MongoDB\Client(env('DB_URI'));
-            $collection = $client->BeePackDB2->feedback;
+            $collection = $client->BeePackDB2->feedbacks;
 
             Log::info('Submitting feedback for user: ' . Auth::user()->Customer_ID);
 
