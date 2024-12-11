@@ -54,7 +54,7 @@
                                     {{ $order->feedback_submitted ? 'Sent Review' : 'Feedback' }}
                                 </button>
 
-                                <!-- Feedback Modal -->
+                                <!-- Feedback Modal   -->
                                 <div class="modal fade" id="feedbackModal{{ $order->order_id }}" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel{{ $order->order_id }}" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
