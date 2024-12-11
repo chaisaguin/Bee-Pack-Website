@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Log;
 use MongoDB\Client;
 use Illuminate\Support\Facades\Cache;
 use App\Models\CustomerOrder;
+use Illuminate\Support\Facades\Auth;
+
 class FrontendController extends Controller
 {
     public function welcome()
@@ -94,4 +96,37 @@ class FrontendController extends Controller
         }
     }
 
+    public function submit_feedback(Request $request)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comments' => 'nullable|string',
+        ]);
+
+        try {
+            // Connect to MongoDB
+            $client = new \MongoDB\Client(env('DB_URI'));
+            $collection = $client->BeePackDB2->feedback;
+
+            Log::info('Submitting feedback for user: ' . Auth::user()->Customer_ID);
+
+            // Insert feedback into the database
+            $collection->insertOne([
+                'Feedback_ID' => uniqid('FDBK'),
+                'Customer_ID' => Auth::user()->Customer_ID,
+                'Employee_ID' => null, // Assuming employee ID is not available
+                'Customer_Rating' => $validatedData['rating'],
+                'Feedback_Comments' => $validatedData['comments'],
+            ]);
+
+            Log::info('Feedback submitted successfully.');
+
+            // Redirect back with a success message
+            return redirect()->back()->with('success', 'Thank you for your feedback!');
+        } catch (\Exception $e) {
+            Log::error('Error submitting feedback: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to submit feedback.');
+        }
+    }
 }

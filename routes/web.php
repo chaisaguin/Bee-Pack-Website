@@ -27,6 +27,12 @@ Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkou
 Route::post('/place-an-order', [CartController::class, 'place_an_order'])->name('cart.place-an-order');
 Route::get('/order-confirmation/{orderId}', [CartController::class, 'order_confirmation'])->name('cart.order-confirmation');
 
+// Feedback Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/feedback', [FrontendController::class, 'show_feedback'])->name('feedback');
+    Route::post('/feedback', [FrontendController::class, 'submit_feedback'])->name('feedback.submit');
+});
+
 // Product Routes
 Route::get('/product', [FrontendController::class, 'product'])->name('product');
 Route::get('/product/{id}', [FrontendController::class, 'product'])->name('product');
