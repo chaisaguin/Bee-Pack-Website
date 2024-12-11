@@ -67,6 +67,11 @@
                                             <form action="{{ route('feedback.submit', $order->order_id) }}" method="POST">
                                                 @csrf
                                                 <div class="modal-body">
+                                                <div class="form-group">
+                                                        <label for="order">Order ID</label>
+                                                        <input type="text" class="form-control" id="order" name="order"
+                                                        value="{{ $order->order_id }}" disabled >
+                                                    </div>
                                                     <div class="form-group">
                                                         <label for="rating">Rating</label>
                                                         <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
