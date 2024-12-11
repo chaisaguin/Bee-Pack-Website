@@ -13,6 +13,7 @@ class Order extends Model
         'customer_id',
         'order_id',
         'Payment_ReferenceCode',
+        'Feedback_ID',
         'order_item_id',
         'subtotal',
         'total',

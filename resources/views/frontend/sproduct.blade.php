@@ -9,9 +9,6 @@
         justify-content: center;
         align-items: center;
         margin-top: 40px;
-    }
-
-    .alert {
         border: none;
         border-radius: 16px;
         padding: 15px 20px;
@@ -66,27 +63,27 @@
     }
 </style>
 
-<div class="alert-container">
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class='bx bxs-check-circle me-2'></i>
-            {{ session('success') }}
-            <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
-                <i class='bx bx-x'></i>
-            </button>
-        </div>
-    @endif
+<div class="container mt-3">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class='bx bxs-check-circle me-2'></i>
+                    {{ session('success') }}
+                    <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class='bx bx-x'></i>
+                    </button>
+                </div>
+            @endif
 
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class='bx bxs-error-circle me-2'></i>
-            {{ session('error') }}
-            <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
-                <i class='bx bx-x'></i>
-            </button>
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    {{ session('error') }}
+                    <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
+                        <i class='bx bx-x'></i>
+                    </button>
+                </div>
+            @endif
         </div>
-    @endif
-</div>
 
 
 

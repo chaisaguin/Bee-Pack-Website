@@ -8,6 +8,7 @@ use MongoDB\Client;
 use Illuminate\Support\Facades\Cache;
 use App\Models\CustomerOrder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class FrontendController extends Controller
 {
@@ -119,15 +120,39 @@ class FrontendController extends Controller
 
             Log::info('Submitting feedback for user: ' . Auth::user()->Customer_ID);
 
-            // Get the next Feedback_ID
-            $lastFeedback = $collection->findOne([], ['sort' => ['Feedback_ID' => -1]]);
-            $nextId = $lastFeedback ? intval(substr($lastFeedback['Feedback_ID'], 4)) + 1 : 1;
+            // Get the next Feedback_ID using MongoDB's findOne with sort
+            $lastFeedback = $collection->findOne(
+                [],
+                [
+                    'sort' => ['Feedback_ID' => -1],
+                    'projection' => ['Feedback_ID' => 1]
+                ]
+            );
 
-            // Insert feedback into the database
-            $collection->insertOne([
-                'Feedback_ID' => 'FDBK' . $nextId,
+            // Ensure proper incrementation
+            $currentId = 0;
+            if ($lastFeedback && isset($lastFeedback['Feedback_ID'])) {
+                $matches = [];
+                if (preg_match('/FDBK(\d+)/', $lastFeedback['Feedback_ID'], $matches)) {
+                    $currentId = intval($matches[1]);
+                }
+            }
+            $nextId = $currentId + 1;
+
+            // Format the new Feedback_ID
+            $feedbackId = sprintf('FDBK%d', $nextId);
+            
+            Log::info('Last Feedback_ID: ' . ($lastFeedback['Feedback_ID'] ?? 'None') . ', Generated new ID: ' . $feedbackId);
+
+            // Store Feedback_ID in session
+            Session::put('checkout.Feedback_ID', $feedbackId);
+            Log::info('Stored Feedback_ID in session: ' . $feedbackId);
+
+            // Insert feedback into the database with the new ID
+            $result = $collection->insertOne([
+                'Feedback_ID' => $feedbackId,
                 'Customer_ID' => Auth::user()->Customer_ID,
-                'Employee_ID' => null, // Assuming employee ID is not available
+                'Employee_ID' => 'EMP00002', // Assuming employee ID is not available
                 'Customer_Rating' => $validatedData['rating'],
                 'Feedback_Comments' => $validatedData['comments'],
             ]);

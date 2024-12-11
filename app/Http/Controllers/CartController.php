@@ -255,12 +255,14 @@ class CartController extends Controller
             $order->landmark = $address->landmark;
             $order->zip = $address->zip;
             $order->Payment_ReferenceCode = $Payment_ReferenceCode;
+            $order->Feedback_ID = Session::get('checkout.Feedback_ID', ''); // Get Feedback_ID from session, default to empty string
             $order->save();
 
             Log::info('Order created:', [
                 'customer_id' => $order->customer_id,
                 'order_id' => $order->order_id,
-                'total' => $order->total
+                'total' => $order->total,
+                'Feedback_ID' => $order->Feedback_ID // Include Feedback_ID for verification
             ]);
 
 
@@ -284,9 +286,13 @@ class CartController extends Controller
                     $transaction->mode = 'cod';
                     $payment_method = 'Cash on Delivery';
                     break;
-                case 'card':
-                    $transaction->mode = 'card';
-                    $payment_method = 'Credit/Debit Card';
+                case 'online_banking':
+                    $transaction->mode = 'online_banking';
+                    $payment_method = 'Online Banking';
+                    break;
+                case 'gcash':
+                    $transaction->mode = 'gcash';
+                    $payment_method = 'GCash';
                     break;
                 case 'e_wallet':
                     $transaction->mode = 'e_wallet';
