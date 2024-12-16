@@ -55,7 +55,8 @@
                 <tr>
                     <td>
                         <div class="shopping-cart__product-item">
-                            <img loading="lazy" src="{{ asset($product->image_path) }}" width="120" height="120" alt="{{ $product->name }}" />
+                            <img src="{{ $product->options->image_path }}" width="120" height="120" alt="{{ $product->name }}" />
+                            
                         </div>
                     </td>
                     <td>
@@ -67,7 +68,7 @@
                         </div>
                     </td>
                     <td>
-                        <span class="shopping-cart__product-price">${{ $product->price }}</span>
+                        <span class="shopping-cart__product-price">₱{{ $product->price }}</span>
                     </td>
                     <td>
                         <div class="qty-control">
@@ -79,15 +80,15 @@
                         </div>
                     </td>
                     <td>
-                        <span class="shopping-cart__subtotal">${{ $product->subtotal }}</span>
+                        <span class="shopping-cart__subtotal">₱{{ $product->subtotal }}</span>
                     </td>
 
                     <form method="POST" action="{{ route('cart.remove', ['rowId' => $product->rowId]) }}">
                         @csrf
                         @method('DELETE')
                     <td>
-                        <button type="submit" class="remove-cart">
-                            <i class='bx bx-x-circle'></i>
+                        <button type="submit" class="btn btn-outline-danger" title="Remove from Cart">
+                            Remove
                         </button>
                     </td>
                     </form>
@@ -112,22 +113,24 @@
             <table class="cart-totals">
                 <tr>
                     <th>Subtotal</th>
-                    <td>${{ Cart::subtotal() }}</td>
+                    <td>₱{{ Cart::subtotal() }}</td>
                 </tr>
                 <tr>
-                    <th>Shipping</th>
-                    <td>
+                    <th colspan="2" style="text-align: left; padding-bottom: 5px;">Shipping</th>
+                </tr>
+                <tr>
+                    <td colspan="2">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="shipping" id="free_shipping" value="free">
-                            <label for="free_shipping">Free Shipping</label>
+                            <input class="form-check-input" type="radio" name="shipping" id="free_shipping" value="free" style="cursor:pointer;"> 
+                            <label for="free_shipping" style="cursor:pointer;">Free Shipping</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="shipping" id="flat_rate" value="flat">
-                            <label for="flat_rate">Flat Rate: $49</label>
+                            <input class="form-check-input" type="radio" name="shipping" id="flat_rate" value="flat" disabled>
+                            <label for="flat_rate" style="color:grey">Flat Rate: ₱120</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="shipping" id="local_pickup" value="pickup">
-                            <label for="local_pickup">Local Pickup: $8</label>
+                            <input class="form-check-input" type="radio" name="shipping" id="local_pickup" value="pickup" disabled>
+                            <label for="local_pickup" style="color:grey">Local Pickup: ₱40</label>
                         </div>
                         <div>Shipping to AL.</div>
                         <div>
@@ -135,13 +138,14 @@
                         </div>
                     </td>
                 </tr>
+
                 <tr>
                     <th>VAT</th>
-                    <td>${{ Cart::tax() }}</td>
+                    <td>₱{{ Cart::tax() }}</td>
                 </tr>
                 <tr>
                     <th>Total</th>
-                    <td>${{ Cart::total() }}</td>
+                    <td>₱{{ Cart::total() }}</td>
                 </tr>
             </table>
             <div class="checkout-btn-wrapper">

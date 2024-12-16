@@ -239,17 +239,17 @@
                 </div>
                 <div class="form-check">
                   <input class="form-check-input form-check-input_fill" type="radio" name="mode" 
-                  value="cod" id="payment2">
-                  <label class="form-check-label" for="payment2">
-                    Cash on Delivery
+                  value="e_wallet" id="payment4">
+                  <label class="form-check-label" for="payment4">
+                    E-Wallet
                     <p class="option-detail">
-                      Pay when you receive your order.
+                      Pay using your preferred e-wallet service (PayMaya, etc.).
                     </p>
                   </label>
                 </div>
                 <div class="form-check">
                   <input class="form-check-input form-check-input_fill" type="radio" name="mode" 
-                  value="gcash" id="payment3">
+                  value="gcash" id="payment3" disabled>
                   <label class="form-check-label" for="payment3">
                     GCash
                     <p class="option-detail">
@@ -259,11 +259,11 @@
                 </div>
                 <div class="form-check">
                   <input class="form-check-input form-check-input_fill" type="radio" name="mode" 
-                  value="e_wallet" id="payment4">
-                  <label class="form-check-label" for="payment4">
-                    E-Wallet
+                  value="cod" id="payment2" disabled>
+                  <label class="form-check-label" for="payment2">
+                    Cash on Delivery
                     <p class="option-detail">
-                      Pay using your preferred e-wallet service (PayMaya, etc.).
+                      Pay when you receive your order.
                     </p>
                   </label>
                 </div>

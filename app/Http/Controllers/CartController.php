@@ -44,11 +44,14 @@ class CartController extends Controller
         
         $cartInstance = $this->getCartInstance();
         
+        $product = Products::where('Product_ID', $productId)->first();
+
         Cart::instance($cartInstance)->add(
             $productId,
             $title,
             $quantity,
-            $price
+            $price,
+            ['image_path' => $product->image_path]
         )->associate(Products::class);
 
         // Store cart in database
@@ -181,7 +184,7 @@ class CartController extends Controller
         try {
             // Validate the request
             $validated = $request->validate([
-                'mode' => 'required|in:cod,card,e_wallet'
+                'mode' => 'required|in:online_banking,cod,card,e_wallet'
             ]);
 
             if (!Auth::check()) {

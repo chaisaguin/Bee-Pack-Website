@@ -32,7 +32,7 @@
         <div class="feature-card">
             <i class='bx bxs-group' ></i>
             <h3>Who we are &<br>what we do</h3>
-            <p>Learn about our mission and values</p>
+            <p>Learn our mission & values</p>
             <a href="#" class="feature-btn">START HERE <i class='bx bx-right-arrow-alt'></i></a>
         </div>
 
@@ -50,12 +50,6 @@
             <a href="#" class="feature-btn">START HERE <i class='bx bx-right-arrow-alt'></i></a>
         </div>
     </div>
-</div>
-
-<div class="about-team section-p1">
-    <span class="badge">ABOUT US</span>
-    <h2>We are a creative and<br>talented team of creators</h2>
-    <p>Our team consists of skilled professionals who are experts in their fields,<br>working together to bring you the best sustainable packaging solutions.</p>
 </div>
 
 <style>
@@ -155,6 +149,8 @@
 
 .feature-card:hover {
     transform: translateY(-10px);
+    background: linear-gradient(57deg, rgba(255,250,231,1) 0%, rgba(255,230,120,1) 100%);
+
 }
 
 .feature-card img {
@@ -242,6 +238,22 @@
             'collection' => 'Bee Pack Winter Collection',
             'title' => 'Roll-on Food Wrap',
             'price' => '$20',
+            'rating' => 4,
+        ])
+
+        @include('components.product-card', [
+        'img' => 'media/products/f4.png',
+        'collection' => 'Bee Pack Variety',
+        'title' => 'Five-Pack Assorted Wrap',
+        'price' => '$30',
+        'rating' => 4.5,
+        ])
+
+        @include('components.product-card', [
+            'img' => 'media/products/f5.png',
+            'collection' => 'Bee Pack Bowl Collection',
+            'title' => 'Bowl Cover',
+            'price' => '$25',
             'rating' => 4,
         ])
     

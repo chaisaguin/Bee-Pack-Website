@@ -1101,3 +1101,66 @@ footer .pay {
     }
     
 }
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+.qty-btn {
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+
+.qty-input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+/* TEAM ABOUT */
+
+.team-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 40px 0;
+}
+
+/* Individual team member card */
+.team-member {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+/* Rounded image styling */
+.team-member img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%; /* Makes the image rounded */
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+/* Name styling */
+.team-member h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Role styling */
+.team-member p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}

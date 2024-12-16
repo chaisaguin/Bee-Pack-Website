@@ -3,52 +3,39 @@
 @section('title', 'About Us')
 
 @section('content')
-<div class="about-hero section-p1" id="">
-    <div class="hero-content">
-        <span class="badge">WELCOME TO BEE PACK</span>
-        <h1>We are an Eco-Friendly<br>Packaging Company</h1>
-        <p class="subtitle">Creating sustainable solutions for a better tomorrow</p>
-        <a href="#learn-more" class="learn-more-btn">LEARN MORE <i class='bx bx-right-arrow-alt'></i></a>
-    </div>
-    
-    <div class="service-tags">
-        <div class="tag">SUSTAINABLE</div>
-        <div class="tag">ECO-FRIENDLY</div>
-        <div class="tag">INNOVATIVE</div>
-    </div>
-</div>
-
-<div class="about-features section-p1">
-    <h2>What We Offer</h2>
-    <div class="features-container">
-        <div class="feature-card">
-            <img src="{{ asset('images/about/feature1.svg') }}" alt="Who we are">
-            <h3>Who we are &<br>what we do</h3>
-            <p>Learn about our mission and values</p>
-            <a href="#" class="feature-btn">START HERE <i class='bx bx-right-arrow-alt'></i></a>
-        </div>
-
-        <div class="feature-card">
-            <img src="{{ asset('images/about/feature2.svg') }}" alt="Custom Design">
-            <h3>We'll design your<br>projects</h3>
-            <p>Custom packaging solutions</p>
-            <a href="#" class="feature-btn">START HERE <i class='bx bx-right-arrow-alt'></i></a>
-        </div>
-
-        <div class="feature-card">
-            <img src="{{ asset('images/about/feature3.svg') }}" alt="Contact">
-            <h3>Drop us your<br>message!</h3>
-            <p>Get in touch with our team</p>
-            <a href="#" class="feature-btn">START HERE <i class='bx bx-right-arrow-alt'></i></a>
-        </div>
-    </div>
-</div>
 
 <div class="about-team section-p1">
     <span class="badge">ABOUT US</span>
+    <br> <img src="{{ asset('media/long-logo-big.png') }}" alt="Bee Pack Logo">
     <h2>We are a creative and<br>talented team of creators</h2>
     <p>Our team consists of skilled professionals who are experts in their fields,<br>working together to bring you the best sustainable packaging solutions.</p>
 </div>
+
+<div class="about-features section-p1">
+    <h2>The Team</h2>
+    <div class="features-container">
+        <!-- Feature Card with Team Member 1 -->
+        <div class="feature-card team-member">
+            <img src="{{ asset('media/about/rem.jpg') }}" alt="Rem Well Pepito" class="team-img">
+            <h3>Rem Well Pepito</h3>
+            <p>Sales and Finance Head</p>
+        </div>
+
+        <!-- Feature Card 2 -->
+        <div class="feature-card team-member">
+            <img src="{{ asset('media/about/chai.png') }}" alt="Mary Kate Saguin">
+            <h3>Mary Kate Saguin</h3>
+            <p>Product & Development Designer</p>
+        </div>
+        <!-- Feature Card 3 -->
+        <div class="feature-card team-member">
+            <img src="{{ asset('media/about/kat.png') }}" alt="Carylle Toyogon">
+            <h3>Carylle Toyogon</h3>
+            <p>Logistics Head</p>
+        </div>
+    </div>
+</div>
+
 
 <style>
 .about-hero {
@@ -138,7 +125,8 @@
 }
 
 .feature-card {
-    background-color: #f5f5f5;
+    background: rgb(255,250,231);
+    background: linear-gradient(57deg, rgba(255,250,231,1) 0%, rgba(255,230,120,1) 100%);
     padding: 30px;
     border-radius: 15px;
     text-align: center;
@@ -147,6 +135,8 @@
 
 .feature-card:hover {
     transform: translateY(-10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+
 }
 
 .feature-card img {

@@ -4,7 +4,7 @@
 
 @section('content')
 <style>
-    .alert-container {
+    .alert {
         display: flex;
         justify-content: center;
         align-items: center;

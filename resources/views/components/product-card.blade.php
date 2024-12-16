@@ -1,4 +1,4 @@
-<div class="pro" onclick="window.location.href='{{ $link ?? '#' }}'; return false;">
+<div class="pro" onclick="window.location.href='{{ route('shop') }}'; return false;">
     <img src="{{ asset($img) }}">
     <div class="des">
         <span>{{ $collection }}</span>
